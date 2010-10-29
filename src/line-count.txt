@@ -1,0 +1,1 @@
+find2 . -name *.java | xargs wc -l

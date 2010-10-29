@@ -1,0 +1,9 @@
+$ pwd
+/cloog-0.14.1/include
+
+$ swig -java -package cloog swig.i
+
+$ gcc -c swig_wrap.c -I/d/jdk1.6.0_10/include -I/d/jdk1.6.0_10/include/win32 -I
+. -I/usr/local/include
+
+$ gcc -shared swig_wrap.o ../.libs/libcloog.a /usr/local/lib/libpolylib32.a -Wl,--add-stdcall-alias  -o cloog.dll

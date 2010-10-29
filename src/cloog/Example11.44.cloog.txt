@@ -1,0 +1,46 @@
+# language: C
+c
+
+# parameters {0>=0}
+1 2
+1 0
+0
+
+2 # Number of statements
+1 # First Statement, One domain
+# {i, j | 1<=i<=100,1<=j<=100}
+4 4
+#  i  j   1
+1  1  0  -1
+1 -1  0   100
+1  0  1  -1
+1  0 -1   100
+0  0  0
+1 # Second Statement, One domain
+# {i, j | 1<=i<=100,1<=j<=100}
+4 4
+#  i  j   1
+1  1  0  -1
+1 -1  0   100
+1  0  1  -1
+1  0 -1   100
+0  0  0
+
+1
+i j
+
+2 # Scattering functions
+3 7
+# P I J i j 1
+0 1 0 0 -1 1 1
+0 0 1 0 1 0 0
+0 0 0 1 0 1 0
+
+3 7
+# P I J i j 1
+0 1 0 0 -1 1 0
+0 0 1 0 1 0 0
+0 0 0 1 0 1 0
+
+1
+P I J

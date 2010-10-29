@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="GB2312"?>
+
+<project name="SUIF" default="compile" basedir=".">
+
+  <target name="help">
+	<echo message="运行'ant compile'编译系统。"/>
+	<echo message="运行'ant test'测试系统。需要将junit.jar加入到classpath或者加入到ANT_HOME下的lib目录中"/>
+	<echo message="运行'ant clean'清除所有的临时文件。"/>
+  </target>
+
+  <target name="init">
+	  <property name="build.home" location="${basedir}/build"/>
+	  <property name="test.report.home" location="${build.home}/report"/>
+      <mkdir dir="${build.home}"/>
+      <mkdir dir="${build.home}/report"/>
+
+		<path id="java.classpath">
+			<pathelement location="${basedir}"/>
+			<pathelement location="${build.home}/"/>
+			<fileset dir="${basedir}/lib" includes="**/*.jar"/>
+		</path>
+  </target>
+
+    <target name="compile" depends="init">
+		<javac srcdir="${basedir}/src"
+			   destdir="${build.home}"
+			   classpathref="java.classpath"
+			   encoding="GBK"
+			   debug="on"
+			   optimize="off"
+			   deprecation="off"
+			   verbose="off"
+			   listfiles="yes"/>
+		<copy todir="${build.home}"  verbose="true">
+		  <fileset dir="${basedir}/src">
+			 <include name="**/*.dll"/>
+			 <include name="**/*.so"/>
+			 <include name="**/*.txt"/>
+			 <exclude name="**/*.bak"/>
+		  </fileset>
+		</copy>
+	</target>
+
+      <target name="test" depends="compile">
+		  <delete>
+			<fileset dir="${test.report.home}" includes="**/*.*"/>
+		  </delete>
+		<junit printsummary="yes" haltonfailure="no" haltonerror="no" fork="yes">
+			<classpath>
+				<path refid="java.classpath"/>
+			</classpath>
+			<formatter type="xml" usefile="true"/>
+			  <batchtest fork="yes" todir="${test.report.home}">
+				<fileset dir="${build.home}">
+				  <include name="**/*Test.class"/>
+				</fileset>
+			  </batchtest>
+		</junit>
+		<junitreport todir="${test.report.home}">
+		  <fileset dir="${test.report.home}">
+			<include name="TEST-*.xml"/>
+		  </fileset>
+		  <report format="frames" todir="${test.report.home}/html"/>
+		</junitreport>
+      	<exec executable="cmd.exe">
+      	  <arg line="/c start iexplore.exe ${test.report.home}/html/index.html"/>
+      	</exec>
+	</target>
+
+ <target name="tt"  depends="compile">
+		<junit printsummary="yes" haltonfailure="no" haltonerror="no" fork="yes">
+			<classpath>
+				<path refid="java.classpath"/>
+			</classpath>
+			<formatter type="plain" usefile="true"/>
+			<test todir="${basedir}" name="util.MatrixUtilsTest"/>
+		</junit>
+ </target>
+
+
+ <target name="clean">
+	  <property name="build.home" location="${basedir}/build"/>
+	  <delete>
+		<fileset dir="." includes="**/*.bak"/>
+		<fileset dir="src" includes="**/*.class"/>
+		<fileset dir="src" includes="**/*.o"/>
+		<fileset dir="." includes="TEST-*Test.txt"/>
+	  </delete>
+	  <delete dir="${build.home}"/>
+  </target>
+
+</project>

@@ -1,0 +1,13 @@
+
+all:
+	cd .. && javac jniUtil/*.java && javah -jni -d jniUtil jniUtil.CPointer  jniUtil.CFunction jniUtil.CMalloc && cd jniUtil
+	as dispatch_x86_linux.s -o dispatch_x86_linux.o
+	g++ -c dispatch.cpp -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux -o dispatch.o
+	g++ -shared dispatch_x86_linux.o dispatch.o -ldl -o libdisp.so
+	cp -f libdisp.so /usr/lib             
+
+clean:
+	-rm  -f *.class *.h *.exe *.obj *.pdb *.exp *.lib *.exp *.ilk *.tst *.bak *.log
+	
+cleanall:clean
+	-rm  -f *.manifest *.dll *.so

@@ -1,0 +1,15 @@
+
+all:
+	cd .. && javac jniUtil/*.java && javah -jni -d jniUtil jniUtil.CPointer  jniUtil.CFunction jniUtil.CMalloc && cd jniUtil
+	cl  -nologo -MD -Zi -DWIN32 -I%JAVA_HOME%\include -I%JAVA_HOME%\include\win32 /c dispatch_x86.c
+	cl  -nologo -MD -Zi -DWIN32 -I%JAVA_HOME%\include -I%JAVA_HOME%\include\win32 /c dispatch.cpp
+	link -nologo -debug -dll -out:disp.dll dispatch_x86.obj dispatch.obj
+	mt.exe -manifest disp.dll.manifest -outputresource:disp.dll;2
+	copy /y disp.dll "%windir%"
+	copy /y disp.dll.manifest "%windir%"
+
+clean:
+	-del *.class *.h *.exe *.obj *.pdb *.exp *.lib *.exp *.ilk *.tst *.bak *.log *.o
+	
+cleanall:clean
+	-del *.manifest *.dll *.so
